@@ -1,0 +1,31 @@
+#!/bin/bash
+# adapted from https://github.com/cwilbur/code-samples/tree/master/git-utilities
+
+template_repo=$1
+template_branch=$2
+user_org=$3
+new_repo=$4
+
+commits_back=5
+
+test -z $template_repo || test -z $new_repo || test -z $user_org && \
+  echo \
+  "usage: git template <template_repo> <template_branch> <user_org> <destination>" \
+  1>&2 && exit 1
+
+hub clone --origin source $template_repo $new_repo
+cd $new_repo
+
+if [ $template_branch != 'master' ]; then
+  git checkout $template_branch
+  git branch -d master
+  git checkout -b master
+  git branch -d $template_branch
+fi
+
+first_commit=`hub log --pretty=oneline | head -$commits_back | tail -1 | awk '{print $1}'`
+git truncate $first_commit "Automatic truncation for templating"
+
+hub create $user_org/$new_repo
+git push origin master
+git branch --set-upstream-to origin/master
