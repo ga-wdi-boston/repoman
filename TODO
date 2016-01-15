@@ -1,0 +1,5 @@
+-  [ ] Remove dependency on ghi
+-  [ ] Improve logging and output
+-  [ ] Add command for creating milestones and due dates
+-  [ ] Store configurations for labels and milestones in ~/.repoman/
+-  [ ] Store configuration (auth token?) in ~/.repoman/config
