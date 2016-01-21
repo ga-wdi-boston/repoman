@@ -1,75 +1,70 @@
 #!/usr/bin/env ruby
 
-class Repoman
-  VERSION = '0.0.1'
+$:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
-  attr_reader :options
+require 'estimate'
+require 'planning'
 
-  def initialize(arguments)
-    @arguments = arguments
+module Repoman
+  class App
+    VERSION = '0.0.1'
 
-    parse_options
+    attr_reader :options
 
-    perform
-  end
+    def initialize(arguments)
+      @arguments = arguments
 
-  def perform
-    estimate_color = '#333333'
-    estimate_labels = []
-    5.times do |i|
-      estimate_labels << "#{i+1} estimate"
+      parse_options
+
+      perform
     end
 
-    actual_color = '#bfe5bf'
-    actual_labels = []
-    5.times do |i|
-      actual_labels << "#{i+1} actual"
-    end
-
-    estimate_labels.each do |l|
-      `ghi label \"#{l}\" -c \"#{estimate_color}\" -- \"#{@organization_repository}\"`
-    end
-
-    actual_labels.each do |l|
-      `ghi label \"#{l}\" -c \"#{actual_color}\" -- \"#{@organization_repository}\"`
-    end
-  end
-
-protected
-
-  def parse_options
-    require 'optparse'
-
-    @options = {}
-    optparser = OptionParser.new do |opts|
-      opts.banner = "Usage: repoman <organization/repository> [options]"
-      opts.separator ""
-      opts.separator "Specific options:"
-
-      # opts.on("-l", "--label", "Add predefined labels to repository") do |l|
-      #   options[:label] = l
-      # end
-
-      opts.on_tail("-h", "--help", "Prints this help") do
-        puts opts
-        exit 0
+    def perform
+      ESTIMATE_LABELS.each do |estimate|
+        `ghi label \"#{estimate.label_name}\" -c \"#{estimate.color}\" -- \"#{@organization_repository}\"`
       end
 
-      opts.on_tail("-v", "--version", "Show version") do
-        puts VERSION
-        exit 0
+      PLANNING_LABELS.each do |planning|
+        `ghi label \"#{planning.label_name}\" -c \"#{planning.color}\" -- \"#{@organization_repository}\"`
       end
     end
 
-    optparser.parse!(@arguments)
+  protected
 
-    if ARGV.empty?
-      puts optparser
-      exit 1
-    else
-      @organization_repository = ARGV[0]
+    def parse_options
+      require 'optparse'
+
+      @options = {}
+      optparser = OptionParser.new do |opts|
+        opts.banner = "Usage: repoman <organization/repository> [options]"
+        opts.separator ""
+        opts.separator "Specific options:"
+
+        # opts.on("-l", "--label", "Add predefined labels to repository") do |l|
+        #   options[:label] = l
+        # end
+
+        opts.on_tail("-h", "--help", "Prints this help") do
+          puts opts
+          exit 0
+        end
+
+        opts.on_tail("-v", "--version", "Show version") do
+          puts VERSION
+          exit 0
+        end
+      end
+
+      optparser.parse!(@arguments)
+
+      if ARGV.empty?
+        puts optparser
+        exit 1
+      else
+        @organization_repository = ARGV[0]
+      end
     end
   end
 end
 
-Repoman.new(ARGV)
+Repoman::App.new(ARGV)
