@@ -23,7 +23,8 @@ module Repoman
     { points: 2, kind: :actual,   color: '#bfe5bf' },
     { points: 3, kind: :actual,   color: '#bfe5bf' },
     { points: 4, kind: :actual,   color: '#bfe5bf' },
-    { points: 5, kind: :actual,   color: '#bfe5bf' }
+    { points: 5, kind: :actual,   color: '#bfe5bf' },
+    { points: 6, kind: :actual,   color: '#bfe5bf' }
   ]. each do |labels|
     ESTIMATE_LABELS << Estimate.new(labels)
   end
