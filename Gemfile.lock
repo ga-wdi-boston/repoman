@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ghi (1.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ghi
+
+BUNDLED WITH
+   1.11.2
