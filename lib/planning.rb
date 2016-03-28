@@ -7,14 +7,13 @@ module Repoman
     end
   end
 
-  PLANNING_LABELS = []
-  [
+  PLANNING_LABELS = [
     { label_name: 'icebox',    color: '#ededed' },
     { label_name: 'planning',  color: '#ededed' },
     { label_name: 'scheduled', color: '#ededed' },
     { label_name: 'prepared',  color: '#ededed' },
-    { label_name: 'delivered', color: '#ededed' },
-  ]. each do |labels|
-    PLANNING_LABELS << Planning.new(labels)
+    { label_name: 'delivered', color: '#ededed' }
+  ].each_with_object([]) do |label, labels|
+    labels << Planning.new(label)
   end
 end

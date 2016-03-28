@@ -8,12 +8,11 @@ module Repoman
     end
 
     def label_name
-      "#{points} #{kind.to_s}"
+      "#{points} #{kind}"
     end
   end
 
-  ESTIMATE_LABELS = []
-  [
+  ESTIMATE_LABELS = [
     { points: 1, kind: :estimate, color: '#333333' },
     { points: 2, kind: :estimate, color: '#333333' },
     { points: 3, kind: :estimate, color: '#333333' },
@@ -25,7 +24,7 @@ module Repoman
     { points: 4, kind: :actual,   color: '#bfe5bf' },
     { points: 5, kind: :actual,   color: '#bfe5bf' },
     { points: 6, kind: :actual,   color: '#bfe5bf' }
-  ]. each do |labels|
-    ESTIMATE_LABELS << Estimate.new(labels)
+  ].each_with_object([]) do |label, labels|
+    labels << Estimate.new(label)
   end
 end
